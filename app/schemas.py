@@ -5,7 +5,10 @@ from app.services.confidence import ConfidenceLevel
 
 class ChatRequest(BaseModel):
     question: str = Field(..., min_length=2, description="User support question")
-    session_id: str = Field(default="default", description="Conversation/session identifier")
+    session_id: str = Field(
+        default="default",
+        description="Conversation/session identifier",
+    )
 
 
 class SourceChunk(BaseModel):
@@ -70,3 +73,25 @@ class AnalyticsResponse(BaseModel):
     avg_retrieval_score: float
     top_intents: list[IntentCount]
     failed_queries: list[FailedQuery]
+
+
+class KnowledgeGapResponse(BaseModel):
+    topic: str
+    frequency: int
+    average_retrieval_score: float
+    priority: ConfidenceLevel
+
+
+class SupportHealthResponse(BaseModel):
+    total_interactions: int
+    average_confidence: float
+    unanswered_rate: float
+    handoff_rate: float
+    average_response_time_ms: float
+
+
+class AnalyticsSummaryResponse(BaseModel):
+    total_interactions: int
+    top_questions: list[str]
+    top_failures: list[str]
+    average_retrieval_score: float
