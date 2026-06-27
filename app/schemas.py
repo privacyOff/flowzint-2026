@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field
 
 from app.services.confidence import ConfidenceLevel
+from app.services.verification import VerificationStatus
 
 
 class ChatRequest(BaseModel):
@@ -45,6 +46,12 @@ class TicketDraft(BaseModel):
     conversation_summary: str
 
 
+class VerificationResponse(BaseModel):
+    status: VerificationStatus
+    reason: str
+    evidence_count: int
+
+
 class ChatResponse(BaseModel):
     answer: str
     sources: list[SourceChunk]
@@ -54,6 +61,7 @@ class ChatResponse(BaseModel):
     debug: DebugInfo
     handoff: HandoffTicket | None = None
     ticket_draft: TicketDraft | None = None
+    verification: VerificationResponse
 
 
 class IntentCount(BaseModel):
