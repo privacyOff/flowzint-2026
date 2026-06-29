@@ -1,19 +1,11 @@
-<<<<<<< HEAD
-=======
 @import "./theme.css";
 @import "./animations.css";
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 
->>>>>>> origin/codex/refactor-frontend-architecture-for-scalability
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-<<<<<<< HEAD
-:root {
-  color-scheme: dark;
-}
-=======
 @layer base {
   * {
     border-color: var(--color-border);
@@ -159,4 +151,3 @@
     margin-top: var(--space-8);
   }
 }
->>>>>>> origin/codex/refactor-frontend-architecture-for-scalability
