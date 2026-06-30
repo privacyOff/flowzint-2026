@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import App from "./App";
 import { DashboardLayout } from "../layouts/DashboardLayout";
 import { LandingLayout } from "../layouts/LandingLayout";
 import { AIInsightsPage } from "../pages/AIInsights/AIInsightsPage";
@@ -9,6 +8,7 @@ import { KnowledgeGapPage } from "../pages/KnowledgeGaps/KnowledgeGapPage";
 import { LandingPage } from "../pages/Landing/LandingPage";
 import { SupportHealthPage } from "../pages/SupportHealth/SupportHealthPage";
 import { Placeholder } from "../components/ui/Placeholder";
+import { ChatPage } from "../pages/Chat/ChatPage";
 
 function useCurrentPath() {
   const [path, setPath] = useState(() => window.location.pathname);
@@ -55,7 +55,7 @@ function renderRoute(path: string) {
     case "/chat":
       return (
         <DashboardLayout currentPath={path}>
-          <App />
+          <ChatPage />
         </DashboardLayout>
       );
     case "/analytics":

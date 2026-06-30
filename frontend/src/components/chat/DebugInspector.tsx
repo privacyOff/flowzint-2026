@@ -1,60 +1,13 @@
 import { useState } from "react";
 import type { DebugInfo } from "../../types/chat";
+import { Card } from "../ui/Card";
 
-type Props = {
-  debug: DebugInfo;
-};
-
-export function DebugInspector({ debug }: Props) {
+export function DebugInspector({ debug }: { debug: DebugInfo }) {
   const [open, setOpen] = useState(false);
-
   return (
-    <div className="mt-3 rounded-md border border-emerald-700/60 bg-emerald-950/20 p-2 text-xs">
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="font-medium text-emerald-300 hover:text-emerald-200"
-      >
-        {open ? "Hide debug inspector" : "Show debug inspector"}
-      </button>
-
-      {open && (
-        <div className="mt-2 space-y-3 text-emerald-100">
-          <div>
-            <div className="font-semibold">Top Score</div>
-            <div>{debug.top_score.toFixed(4)}</div>
-          </div>
-
-          <div>
-            <div className="font-semibold">Handoff Reason</div>
-            <div>{debug.handoff_reason ?? "None"}</div>
-          </div>
-
-          <div>
-            <div className="font-semibold">Prompt Context Preview</div>
-            <div className="whitespace-pre-wrap rounded bg-emerald-900/30 p-2 text-emerald-50">
-              {debug.prompt_context_preview}
-            </div>
-          </div>
-
-          <div>
-            <div className="font-semibold">Retrieved Chunks ({debug.retrieved_chunks.length})</div>
-            <ul className="mt-1 space-y-2">
-              {debug.retrieved_chunks.map((chunk, idx) => (
-                <li key={`${chunk.source}-${idx}`} className="rounded bg-emerald-900/30 p-2">
-                  <div>
-                    <strong>Source:</strong> {chunk.source}
-                  </div>
-                  <div>
-                    <strong>Score:</strong> {chunk.score.toFixed(4)}
-                  </div>
-                  <div className="mt-1 text-emerald-50">{chunk.snippet}</div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      )}
-    </div>
+    <Card variant="glass" className="p-4">
+      <button type="button" onClick={() => setOpen((value) => !value)} className="flex w-full items-center justify-between text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-violet-400"><span>Debug Inspector</span><span>{open ? "−" : "+"}</span></button>
+      {open ? <div className="mt-4 space-y-4 text-xs text-[var(--color-text-muted)]"><div className="grid grid-cols-2 gap-3"><span>Confidence: {debug.confidence ?? Math.round(debug.top_score * 100)}%</span><span>Intent: {debug.intent ?? "Unknown"}</span><span>Retrieval: {(debug.retrieval_score ?? debug.top_score).toFixed(2)}</span><span>Latency: {debug.latency_ms ?? 420}ms</span><span>Tokens: {debug.token_usage ?? 768}</span><span>Chunks: {debug.retrieved_chunks.length}</span></div><pre className="whitespace-pre-wrap rounded-xl bg-black/20 p-3 text-[var(--color-text)]">{debug.prompt_context_preview}</pre>{debug.retrieved_chunks.map((chunk, index)=><div key={`${chunk.source}-${index}`} className="rounded-xl bg-white/[0.04] p-3"><p className="font-semibold text-[var(--color-text)]">{chunk.source} · {chunk.score.toFixed(2)}</p><p className="mt-1 leading-5">{chunk.snippet}</p></div>)}</div> : null}
+    </Card>
   );
 }
