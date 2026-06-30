@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import App from "./App";
 import { DashboardLayout } from "../layouts/DashboardLayout";
 import { LandingLayout } from "../layouts/LandingLayout";
 import { AIInsightsPage } from "../pages/AIInsights/AIInsightsPage";
-import { AnalyticsDashboard } from "../pages/Analytics/AnalyticsPage";
+import { AnalyticsPage } from "../pages/Analytics/AnalyticsPage";
 import { DashboardPage } from "../pages/Dashboard/DashboardPage";
 import { KnowledgeGapPage } from "../pages/KnowledgeGaps/KnowledgeGapPage";
 import { LandingPage } from "../pages/Landing/LandingPage";
 import { SupportHealthPage } from "../pages/SupportHealth/SupportHealthPage";
 import { Placeholder } from "../components/ui/Placeholder";
+import { ChatPage } from "../pages/Chat/ChatPage";
 
 function useCurrentPath() {
   const [path, setPath] = useState(() => window.location.pathname);
@@ -55,13 +55,13 @@ function renderRoute(path: string) {
     case "/chat":
       return (
         <DashboardLayout currentPath={path}>
-          <App />
+          <ChatPage />
         </DashboardLayout>
       );
     case "/analytics":
       return (
         <DashboardLayout currentPath={path}>
-          <AnalyticsDashboard analytics={null} loading={false} error={null} />
+          <AnalyticsPage />
         </DashboardLayout>
       );
     case "/knowledge-gaps":

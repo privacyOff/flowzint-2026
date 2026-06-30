@@ -1,35 +1,33 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
+import { Button } from "../../components/ui/Button";
+import { Textarea } from "../../components/ui/Textarea";
 
-type Props = {
-  onSend: (message: string) => Promise<void>;
-  disabled?: boolean;
-};
+type Props = { onSend: (message: string) => void | Promise<void>; disabled?: boolean; value?: string; onValueChange?: (value: string) => void; };
 
-export function ChatInput({ onSend, disabled }: Props) {
-  const [value, setValue] = useState("");
+export function ChatInput({ onSend, disabled, value: externalValue, onValueChange }: Props) {
+  const [internalValue, setInternalValue] = useState("");
+  const value = externalValue ?? internalValue;
+  const setValue = onValueChange ?? setInternalValue;
+  const ref = useRef<HTMLTextAreaElement | null>(null);
 
-  const submit = async (e: FormEvent) => {
-    e.preventDefault();
+  useEffect(() => { if (ref.current) { ref.current.style.height = "0px"; ref.current.style.height = `${Math.min(ref.current.scrollHeight, 180)}px`; } }, [value]);
+
+  const submit = async (event?: FormEvent) => {
+    event?.preventDefault();
     const trimmed = value.trim();
     if (!trimmed || disabled) return;
     setValue("");
     await onSend(trimmed);
   };
 
+  const onKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); void submit(); }
+  };
+
   return (
-    <form onSubmit={submit} className="flex gap-2 border-t border-slate-700 p-4">
-      <input
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        placeholder="Ask a support question..."
-        className="flex-1 rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-sm text-slate-100 outline-none focus:ring-2 focus:ring-indigo-500"
-      />
-      <button
-        disabled={disabled}
-        className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 disabled:opacity-50"
-      >
-        Send
-      </button>
+    <form onSubmit={submit} className="rounded-2xl border border-white/10 bg-white/[0.04] p-3" aria-label="Chat input">
+      <Textarea ref={ref} label="Message" value={value} onChange={(event)=>setValue(event.target.value)} onKeyDown={onKeyDown} disabled={disabled} placeholder="Ask anything about product support..." className="max-h-44 min-h-12 resize-none" helperText={`${value.length}/1200 characters · Enter to send, Shift+Enter for a new line`} maxLength={1200} autoFocus />
+      <div className="mt-3 flex justify-end"><Button type="submit" disabled={!value.trim() || disabled} loading={disabled}>Send</Button></div>
     </form>
   );
 }
