@@ -107,3 +107,16 @@ def test_prompt_contains_business_values():
     assert "password reset" in prompt
     assert "HEALTHY" in prompt
     assert "89" in prompt
+
+
+def test_prompt_contains_business_context():
+    context = _build_context(
+        make_input()
+    )
+
+    prompt = _build_prompt(context)
+
+    assert "support_health" in prompt
+    assert "knowledge_gaps" in prompt
+    assert "analytics_summary" in prompt
+    assert "executive_summary" in prompt
