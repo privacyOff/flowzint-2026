@@ -1,7 +1,7 @@
 import type { Handoff } from "../../types/chat";
 import { StatusBadge } from "../badges/StatusBadge";
 import { PriorityBadge } from "../badges/PriorityBadge";
-import { Card } from "../ui/Card";
+import { Card } from "../ui";
 
 export function HandoffCard({ handoff }: { handoff: Handoff }) {
   return (

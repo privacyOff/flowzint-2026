@@ -1,6 +1,5 @@
 import type { TicketDraft } from "../../types/chat";
-import { Button } from "../ui/Button";
-import { Card } from "../ui/Card";
+import { Button, Card } from "../ui";
 import { PriorityBadge } from "../badges/PriorityBadge";
 
 export function TicketDraftCard({ ticketDraft }: { ticketDraft: TicketDraft }) {
