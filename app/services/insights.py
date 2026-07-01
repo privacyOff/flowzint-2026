@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Callable
 from dataclasses import dataclass
 
 from app.analytics_summary import AnalyticsSummary
@@ -169,3 +170,32 @@ Return JSON in exactly this format:
   ]
 }}
 """.strip()
+
+
+def generate_insights(
+    insights_input: InsightsInput,
+    client: Callable[[str], str] = _call_gemini,
+) -> Insights:
+    """
+    Generate structured insights from support analytics.
+
+    Any external API, JSON parsing, or schema validation failure
+    results in an empty Insights object.
+    """
+    try:
+        context = _build_context(insights_input)
+        prompt = _build_prompt(context)
+
+        response = client(prompt)
+
+        data = json.loads(response)
+
+        return _parse_response(data)
+
+    except (
+        json.JSONDecodeError,
+        KeyError,
+        TypeError,
+        Exception,
+    ):
+        return _empty_insights()
