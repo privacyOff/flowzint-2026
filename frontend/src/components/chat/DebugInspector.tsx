@@ -4,6 +4,7 @@ import { Card } from "../ui";
 
 export function DebugInspector({ debug }: { debug: DebugInfo }) {
   const [open, setOpen] = useState(false);
+  const retrieval = debug.retrieval_score ?? debug.top_score;
   return (
     <Card variant="glass" className="mt-4 border-emerald-300/20 bg-emerald-500/[0.05] p-4 shadow-lg shadow-emerald-950/10">
       <button type="button" aria-expanded={open} onClick={() => setOpen((value) => !value)} className="flex w-full items-center justify-between rounded-xl text-sm font-semibold text-emerald-100 transition hover:text-white focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-slate-950"><span>Debug Inspector</span><span>{open ? "−" : "+"}</span></button>

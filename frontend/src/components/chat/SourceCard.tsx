@@ -2,9 +2,10 @@ import { useState } from "react";
 import type { Source } from "../../types/chat";
 import { ProgressBar } from "../charts/ProgressBar";
 
-export function SourceCard({ source }: { source: Source }) {
+export function SourceCard({ source, citationNumber }: { source: Source; citationNumber?: number }) {
   const [expanded, setExpanded] = useState(false);
-  const confidence = source.confidenceScore ?? Math.round(source.score * 100);
+  const relevance = source.relevanceScore ?? source.confidenceScore ?? Math.round(source.score * 100);
+  const documentName = source.document ?? source.source;
   return (
     <article className="rounded-xl border border-white/10 bg-slate-950/45 p-3 text-xs shadow-lg shadow-black/10 transition hover:border-violet-300/30 hover:bg-white/[0.06]">
       <button type="button" aria-expanded={expanded} onClick={() => setExpanded((value) => !value)} className="flex w-full items-start justify-between gap-3 rounded-lg text-left focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 focus:ring-offset-slate-950">

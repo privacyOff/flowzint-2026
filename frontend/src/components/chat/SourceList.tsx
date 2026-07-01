@@ -3,7 +3,7 @@ import type { Source } from "../../types/chat";
 import { SourceCard } from "./SourceCard";
 
 export function SourceList({ sources }: { sources: Source[] }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   if (!sources.length) return null;
   return (
     <section className="mt-4 rounded-2xl border border-violet-300/15 bg-violet-500/[0.06] p-3 shadow-inner shadow-violet-950/20" aria-label="Sources used for this response">
