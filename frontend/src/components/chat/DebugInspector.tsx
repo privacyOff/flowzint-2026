@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { DebugInfo } from "../../types/chat";
+import { Card } from "../ui";
 
 export function DebugInspector({ debug }: { debug: DebugInfo }) {
   const [open, setOpen] = useState(false);
