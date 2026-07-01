@@ -4,7 +4,10 @@ from app.services.gap_ranking import (
     GapSeverity,
     KnowledgeGap,
 )
-from app.services.insights import generate_insights
+from app.services.insights import (
+    InsightsInput,
+    generate_insights,
+)
 from app.services.support_health import (
     HealthCategory,
     HealthDrivers,
@@ -12,7 +15,7 @@ from app.services.support_health import (
 )
 
 
-def make_input():
+def make_input() -> InsightsInput:
     health = SupportHealthScore(
         score=89,
         category=HealthCategory.HEALTHY,
@@ -25,9 +28,9 @@ def make_input():
         summary="Support quality is healthy.",
     )
 
-    return {
-        "support_health": health,
-        "analytics_summary": AnalyticsSummary(
+    return InsightsInput(
+        support_health=health,
+        analytics_summary=AnalyticsSummary(
             total_interactions=150,
             top_questions=[],
             top_failures=[
@@ -36,7 +39,7 @@ def make_input():
             average_retrieval_score=0.82,
             support_health=health,
         ),
-        "knowledge_gaps": [
+        knowledge_gaps=[
             KnowledgeGap(
                 topic="password reset",
                 frequency=12,
@@ -54,7 +57,7 @@ def make_input():
                 missing_documentation=False,
             ),
         ],
-    }
+    )
 
 
 def test_generate_insights_success():

@@ -8,7 +8,6 @@ from app.analytics import (
     init_analytics_db,
     record_chat_analytics,
 )
-
 from app.analytics_summary import (
     get_analytics,
     get_analytics_summary,
@@ -19,6 +18,9 @@ from app.services.support_health import (
     RESOLUTION_WEIGHT,
     ESCALATION_WEIGHT,
     get_support_health,
+)
+from app.services.insights import (
+    get_executive_insights,
 )
 from app.config import settings
 from app.ingest import build_or_refresh_index
@@ -34,6 +36,8 @@ from app.schemas import (
     SupportHealthResponse,
     VerificationResponse,
     HealthDriversResponse,
+    ExecutiveInsightsResponse,
+    InsightItemResponse,
 )
 
 logging.basicConfig(level=logging.INFO)
@@ -254,3 +258,50 @@ def analytics_summary() -> AnalyticsSummaryResponse:
 @app.get("/knowledge-gaps", response_model=list[KnowledgeGapResponse],)
 def knowledge_gaps():
     return get_knowledge_gaps()
+
+
+@app.get(
+    "/executive-insights",
+    response_model=ExecutiveInsightsResponse,
+)
+def executive_insights() -> ExecutiveInsightsResponse:
+    try:
+        insights = get_executive_insights()
+
+        return ExecutiveInsightsResponse(
+            executive_summary=(
+                insights.executive_summary
+            ),
+            risks=[
+                InsightItemResponse(
+                    title=item.title,
+                    reason=item.reason,
+                    topic=item.topic,
+                )
+                for item in insights.risks
+            ],
+            recommendations=[
+                InsightItemResponse(
+                    title=item.title,
+                    reason=item.reason,
+                    topic=item.topic,
+                )
+                for item in insights.recommendations
+            ],
+            documentation_suggestions=[
+                InsightItemResponse(
+                    title=item.title,
+                    reason=item.reason,
+                    topic=item.topic,
+                )
+                for item in (
+                    insights.documentation_suggestions
+                )
+            ],
+        )
+
+    except Exception as exc:
+        raise HTTPException(
+            status_code=500,
+            detail=str(exc),
+        ) from exc

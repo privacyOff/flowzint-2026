@@ -106,6 +106,24 @@ class HealthDriversResponse(BaseModel):
     escalation_management: float
 
 
+class InsightItemResponse(BaseModel):
+    title: str
+    reason: str
+    topic: str | None = None
+
+
+class ExecutiveInsightsResponse(BaseModel):
+    executive_summary: str
+
+    risks: list[InsightItemResponse]
+
+    recommendations: list[InsightItemResponse]
+
+    documentation_suggestions: list[
+        InsightItemResponse
+    ]
+
+
 class SupportHealthResponse(BaseModel):
     score: int
     category: HealthCategory

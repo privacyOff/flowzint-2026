@@ -4,9 +4,16 @@ import json
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from app.analytics_summary import AnalyticsSummary
+from app.analytics_summary import (
+    AnalyticsSummary,
+    get_analytics_summary,
+)
 from app.services.gap_ranking import KnowledgeGap
-from app.services.support_health import SupportHealthScore
+from app.services.support_health import (
+    SupportHealthScore,
+    get_support_health,
+)
+from app.services.knowledge_gap import get_knowledge_gaps
 
 
 @dataclass(frozen=True)
@@ -172,6 +179,21 @@ Return JSON in exactly this format:
 """.strip()
 
 
+def _call_gemini(
+    prompt: str,
+) -> str:
+    """
+    Send the prompt to the existing Gemini client and
+    return the model's raw text response.
+    """
+    # Reuse the Gemini client already used elsewhere
+    # in your project.
+
+    response = ...
+
+    return response.text
+
+
 def generate_insights(
     insights_input: InsightsInput,
     client: Callable[[str], str] = _call_gemini,
@@ -199,3 +221,21 @@ def generate_insights(
         Exception,
     ):
         return _empty_insights()
+
+
+def get_executive_insights() -> Insights:
+    support_health = get_support_health()
+
+    analytics_summary = get_analytics_summary()
+
+    knowledge_gaps = get_knowledge_gaps()
+
+    insights_input = InsightsInput(
+        support_health=support_health,
+        analytics_summary=analytics_summary,
+        knowledge_gaps=knowledge_gaps,
+    )
+
+    return generate_insights(
+        insights_input,
+    )
